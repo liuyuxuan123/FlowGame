@@ -36,6 +36,7 @@
 //  The neighbors of a cell not specified by its direction type must not match its color.
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.File;
 import java.net.URL;
@@ -79,13 +80,42 @@ public class FlowGame{
         String relativeFilePosition = "puzzles/" + filePosition;
         URL relativeFileURL = getClass().getResource(relativeFilePosition);
         File gameFile = new File(relativeFileURL.getPath());
+        ArrayList<String> game = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(gameFile))) {
             String line;
             while ((line = br.readLine()) != null) {
-                System.out.println(line);
+                //System.out.println(line);
+                game.add(line);
             }
         } catch (Exception e){
             e.printStackTrace();
+        }
+
+        int row = game.size();
+        int col = game.get(0).length();
+        HashMap<String, Integer> colors = new HashMap<>();
+        for(int i = 0;i < row;i++){
+            if(game.get(i).length() != col){
+                System.out.println("FLOW GAME File Error");
+                return;
+            }
+            for(int j = 0;j < col;j ++){
+                char currentChar = game.get(i).charAt(j);
+                if( (currentChar > 'a' && currentChar < 'z') ||(currentChar > 'A' && currentChar < 'Z')){
+                    String currentStr = String.valueOf(game.get(i).charAt(j));
+                    if(colors.containsKey(currentStr)){
+                        int currentStrSum = colors.get(currentStr) + 1;
+                        if(currentStrSum > 2){
+                            System.out.println("FLOW GAME File Error");
+                            return;
+                        }else {
+                            colors.put(currentStr, currentStrSum);
+                        }
+                    }else{
+                        colors.put(currentStr,1);
+                    }
+                }
+            }
         }
     }
 
