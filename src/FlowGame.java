@@ -57,6 +57,9 @@ public class FlowGame{
     static int BOTTOM_LEFT = BOTTOM | LEFT;
     static int BOTTOM_RIGHT = BOTTOM | RIGHT;
 
+    ArrayList<ArrayList<String>> puzzles;
+    HashMap<String, Integer> colors;
+
     static int[] DIRECTION_TYPES = new int[]{LEFT_TOP, TOP_BOTTOM, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT};
     static HashMap<Integer, String> DIRECTION_CHARS = new  HashMap<Integer, String>() {{
         put(LEFT_TOP,   "─");
@@ -72,6 +75,26 @@ public class FlowGame{
         put("O",43);    put("C",106);   put("M",105);   put("m",41);
         put("P",45);    put("A",100);   put("W",107);   put("g",102);
         put("T",47);    put("b",44);    put("c",46);    put("p",35);
+    }};
+
+    static HashMap<String,String> COLORS = new HashMap<>() {{
+
+        put("R","#FF0000");         //     R	 red
+        put("B","#0000FF");         //     B	 blue
+        put("Y","#FFFF00");         //     Y	 yellow
+        put("G","#008000");         //     G	 green
+        put("O","#FFA500");         //     O	 orange
+        put("C","#00FFFF");         //     C	 cyan
+        put("M","#FF00FF");         //     M	 magenta
+        put("m","#800000");         //     m	 maroon
+        put("P","#800080");         //     P	 purple
+        put("A","#808080");         //     A	 gray
+        put("W","#FFFFFF");         //     W	 white
+        put("g","#90EE90");         //     g	 bright green
+        put("T","#D2B48C");         //     T	 tan
+        put("b","#00008B");         //     b	 dark blue
+        put("c","#008B8B");         //     c	 dark cyan
+        put("p","#FF69B4");         //     p	 pink
     }};
 
 
@@ -117,11 +140,68 @@ public class FlowGame{
                 }
             }
         }
+
+        this.colors = colors;
+        //this.puzzles = puzzle;
+        this.puzzles = new ArrayList<>();
+        for(int i = 0;i < game.size();i++){
+            this.puzzles.add(new ArrayList<String>());
+            String curStr = game.get(i);
+            for(int j = 0;j < game.get(i).length();j++){
+                this.puzzles.get(i).add(Character.toString(curStr.charAt(j)));
+            }
+        }
     }
+
+    public void printPuzzle(){
+        if(this.puzzles.size() == 0){
+            System.out.println("No Puzzle");
+        }else{
+            for(int i = 0 ;i < this.puzzles.size();i++){
+                for(int j = 0;j < this.puzzles.get(i).size();j++){
+                    System.out.printf("%4s", this.puzzles.get(i).get(j));
+                }
+                System.out.print("\n");
+            }
+        }
+    }
+
+
+    public void makeDirectionClauses(){
+        ArrayList<String> directionClause = new ArrayList<>();
+        int numColor = colors.keySet().size();
+//        int puzzleSize = puzzle.size();
+//
+//        for(int i = 0;i < puzzle.size();i++){
+//
+//        }
+    }
+    public void makeColorClauses(){}
+    public void reduceToSAT(){
+
+        int size = this.puzzles.size();
+        int colorsNum = this.colors.keySet().size();
+        int cellsNum = (int)Math.pow(size,2);
+        int cellsColorsNum = colorsNum * cellsNum;
+
+
+        long startTime = System.nanoTime();
+
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);
+    }
+
+
+
+
+
+
+
 
     static public void main(String[] args){
         FlowGame game = new FlowGame();
         game.parsePuzzle("extreme_8x8_01.txt");
+        game.printPuzzle();
     }
 
 }
